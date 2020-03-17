@@ -7,7 +7,8 @@ app = express()
 app.db = db // a variável app.db será utilizada para as queries
 
 consign()
-    .include('./config/middlewares.js')
+    .include('./config/passport.js')
+    .then('./config/middlewares.js')
     .then('./api')
     .then('./config/routes.js')
     .into(app)
