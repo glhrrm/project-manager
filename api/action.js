@@ -93,15 +93,14 @@ module.exports = app => {
 
 	const findByProject = (req, res) => {
 		app.db({ a: 'actions', p: 'projects', c: 'users', aa: 'agents_actions', ag: 'users' })
-			.select('a.name', 'a.description', { project: 'p.name' }, { creator: 'c.name' }, { agent: app.db.raw('array_agg(ag.name)') })
+			.select('a.name', 'a.description', { project: 'p.name' }, { creator: 'c.name' }, { agents: app.db.raw('array_agg(ag.name)') })
 			.where({ projectId: req.params.id })
 			.whereRaw('?? = ??', ['a.projectId', 'p.id'])
 			.whereRaw('?? = ??', ['a.creatorId', 'c.id'])
 			.whereRaw('?? = ??', ['aa.actionId', 'a.id'])
 			.whereRaw('?? = ??', ['aa.agentId', 'ag.id'])
 			.groupBy('a.name', 'a.description', 'p.name', 'c.name')
-			.first()
-			.then(action => action ? res.json(action) : res.status(404).send())
+			.then(actions => actions.length ? res.json(actions) : res.status(404).send())
 			.catch(err => res.status(500).send(err))
 	}
 
