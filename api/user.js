@@ -5,6 +5,9 @@ module.exports = app => {
         const user = { ...req.body }
         if (req.params.id) user.id = req.params.id
 
+        if (!req.originalUrl.startsWith('/users')) user.admin = false // está se cadastrando pela rota /users
+        if (!req.user || !req.user.admin) user.admin = false // não há usuário ou não é admin
+
         try {
             if (!user.name || !user.email || !user.password || !user.confirmPassword)
                 throw 'Campo não informado'
