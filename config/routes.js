@@ -19,4 +19,16 @@ module.exports = app => {
         .get(app.api.project.findById)
         .put(app.api.project.save)
         .delete(app.api.project.remove)
+
+    app.route('/actions')
+        .get(app.api.action.find)
+        .post(app.api.action.save)
+
+    app.route('/actions/:id')
+        .get(app.api.action.findById)
+        .put(app.api.action.save)
+        .delete(app.api.action.remove)
+
+    app.route('/projects/:id/actions')
+        .get(app.api.action.findByProject)
 }
